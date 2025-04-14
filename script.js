@@ -167,11 +167,11 @@ document.addEventListener('DOMContentLoaded', function() {
             tech: ["APM at Google Store", "SWE Intern in Cloud Security", "STEP Intern in Core Privacy"],
             details: "I've spent the last 8 months on the Google Store team where I lead the growth of Nest Aware, Fitbit Premium, and Google One. Additionally, I help out with projects in reverse logistics, retail, and customer support. In this role, I helped set the Google-wide product standard for compliance to FTC subscription laws, collaborated closely with the Fitbit team on their new upcoming subscription-first tracker, and overhauled the site's returns flow (currently in Dogfood). Prior to starting as an APM, I completed two engineering internships where I worked on resource optimization algorithms and distributed ingestion systems.",
             links: [
-                { text: "Returns Flow", url: "go/online-mlr-mvp",  icon: "fa-file-alt" },
-                { text: "New Fitbit Tracker", url: "go/radiance-on-gstore-prd",  icon: "fa-file-alt" },
-                { text: "FTC Compliance", url: "go/gstore-subs-compliance-prd",  icon: "fa-file-alt" }
+                { text: "Returns Flow", url: "https://go/online-mlr-mvp",  icon: "fa-file-alt" },
+                { text: "New Fitbit Tracker", url: "https://go/radiance-on-gstore-prd",  icon: "fa-file-alt" },
+                { text: "FTC Compliance", url: "https://go/gstore-subs-compliance-prd",  icon: "fa-file-alt" }
             ],
-            image: "images/gstore.JPG",
+            image: "images/gstore.jpg",
             color: "#f4ce1b"
         },
         {
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
             details: "I graduated Cum Laude from Northwestern in June 2024. I majored in Computer Science and took several software engineering and machine learning courses. I also took many history, philosophy, economics, and law courses that culminated in a Legal Studies minor. In 2023, I won our university's hackathon with a peer-to-peer mental health coaching service. On campus, I was heavily involved with Club Volleyball, AKPsi (professional fraternity), and in watching every basketball game religiously.",
             links: [
             ],
-            image: "images/wildhacks.JPG",
+            image: "images/wildhacks.jpg",
             color: "#5f6fc9"
         },
         {
@@ -225,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tech: ["Volleyball", "Fitness", "Travel", "Meditation"],
             details: "In my free time, I love to play and coach volleyball! I've been playing since I was 11 and it's a core part of my life. I also love anything wellness related, including going to the gym and meditating. I really enjoy seeing the world as well; my favorite recent trip was to Buenos Aires!",
             links: [],
-            image: "images/dss.JPG",
+            image: "images/dss.jpg",
             color: "#6A7645"
         },
         {
