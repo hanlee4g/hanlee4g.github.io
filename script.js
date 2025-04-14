@@ -167,9 +167,9 @@ document.addEventListener('DOMContentLoaded', function() {
             tech: ["APM at Google Store", "SWE Intern in Cloud Security", "STEP Intern in Core Privacy"],
             details: "I've spent the last 8 months on the Google Store team where I lead the growth of Nest Aware, Fitbit Premium, and Google One. Additionally, I help out with projects in reverse logistics, retail, and customer support. In this role, I helped set the Google-wide product standard for compliance to FTC subscription laws, collaborated closely with the Fitbit team on their new upcoming subscription-first tracker, and overhauled the site's returns flow (currently in Dogfood). Prior to starting as an APM, I completed two engineering internships where I worked on resource optimization algorithms and distributed ingestion systems.",
             links: [
-                { text: "Returns Flow", url: "https://go/online-mlr-mvp",  icon: "fa-file-alt" },
-                { text: "New Fitbit Tracker", url: "https://go/radiance-on-gstore-prd",  icon: "fa-file-alt" },
-                { text: "FTC Compliance", url: "https://go/gstore-subs-compliance-prd",  icon: "fa-file-alt" }
+                { text: "go/online-mlr-mvp",  icon: "fa-file-alt" },
+                { text: "go/radiance-on-gstore-prd",  icon: "fa-file-alt" },
+                { text: "go/gstore-subs-compliance-prd",  icon: "fa-file-alt" }
             ],
             image: "images/gstore.jpg",
             color: "#f4ce1b"
@@ -377,13 +377,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
- // Open modal function
- function openExperienceModal(index) {
+// Open modal function
+function openExperienceModal(index) {
     stopTileSequence(); // Stop sequence when modal opens
     clearTimeout(inactivityTimer); // Prevent sequence starting right after
 
     if (!modal || !modalBody || index < 0 || index >= experienceData.length) return;
     const experience = experienceData[index];
+
+    // Ensure image path case sensitivity is correct here too!
+    const imagePath = experience.image;
 
     // Build modal HTML
     let modalHTML = `
@@ -392,16 +395,18 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="tech-stack">
             ${experience.tech.map(tech => `<span class="tech-item">${tech}</span>`).join('')}
         </div>
-        ${experience.image ? `<img src="${experience.image}" alt="${experience.title} screenshot">` : ''}
+        ${imagePath ? `<img src="${imagePath}" alt="${experience.title} screenshot">` : ''}
+        ${experience.links && experience.links.length > 0 ? `
         <div class="links">
             ${experience.links.map(link =>
-                // --- MODIFICATION HERE ---
-                `<a href="${link.url}" target="_blank" rel="noopener noreferrer" style="color: ${experience.color}">` +
+                // Generate <a> tag WITHOUT href, target, rel
+                // Keep the inline style for color application
+                `<a style="color: ${experience.color}">` +
                     `<i class="fas ${link.icon}"></i> ${link.text}` +
                 `</a>`
-                // --- END MODIFICATION ---
             ).join('')}
         </div>
+        ` : ''}
     `;
     modalBody.innerHTML = modalHTML;
 

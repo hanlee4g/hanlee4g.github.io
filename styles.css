@@ -437,17 +437,30 @@ footer .logo {
     font-size: 0.9rem; /* Relative */
 }
 .modal-body img { width: 100%; border-radius: 8px; margin-bottom: 24px; }
-.links { display: flex; flex-wrap: wrap; gap: 16px; }
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 24px; /* Add some space above the links section if needed */
+}
+
 .links a {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 20px; border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 20px;
     background-color: rgba(255, 255, 255, 0.1);
-    color: var(--primary-text);
+    /* color: var(--primary-text); /* Color is now set inline via JS */
     font-size: 0.9rem; /* Relative */
     font-weight: 500;
-    transition: background-color var(--transition-speed) ease;
+    /* transition: background-color var(--transition-speed) ease; /* Remove transition if no hover effect */
+
+    /* --- ADD/MODIFY THESE --- */
+    cursor: default;        /* Ensures the cursor doesn't change to a pointer */
+    text-decoration: none !important; /* Just in case, ensure no underline */
 }
-.links a:hover { background-color: rgba(255, 255, 255, 0.2); }
+
 
 /* Auto-highlight class for sequence animation */
 .tile.auto-highlight {
