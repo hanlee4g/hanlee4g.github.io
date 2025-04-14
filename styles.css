@@ -1,0 +1,599 @@
+/* Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap');
+
+:root {
+    /* Colors */
+    --primary-text: #ffffff;
+    --secondary-text: #8f8f8f;
+    --background: #000000;
+    --whisk-yellow: #f4ce1b;
+    --videofx-blue: #5c88a1;
+    --imagefx-purple: #5f6fc9;
+    --musicfx-pink: #f4a9d8;
+    --extra1-green: #506B57;
+    --extra2-brown: #A8714C;
+    --extra3-olive: #6A7645;
+    --extra4-mauve: #654C5D;
+    --button-bg: rgba(255, 255, 255, 0.8);
+    --button-bg-hover: rgba(255, 255, 255, 1);
+    --button-text: #333;
+
+    /* Brightness Factors */
+    --dark-factor: 0.6;
+    --light-factor: 1.3;
+    --whisk-light-factor: 1.15; /* Specific brighter factor for yellow */
+
+    /* Layout & Sizing (Baseline - Large Desktop / Laptop) */
+    --base-font-size: 16px;
+    --header-height: 72px; /* Approximate */
+    --footer-height: 62px; /* Approximate */
+    --hero-h1-size: 20.8px;
+    --hero-h2-size: 52px;
+    --tile-width: 345px;
+    --tile-height-vh: 68vh; /* Relative height */
+    --tile-max-height: 650px; /* Absolute max */
+    --tile-min-height: 400px; /* Absolute min */
+    --tile-gap: 15px;
+    --tile-padding: 32px;
+    --tile-h3-size: 28px;
+    --tile-p-size: 14px;
+    --button-font-size: 13px;
+    --wrapper-padding-x: 30px; /* Horizontal padding for tiles wrapper */
+    --wrapper-padding-bottom: 20px;
+
+    /* Animations */
+    --animation-duration: 5s;
+    --transition-speed: 0.3s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    font-size: var(--base-font-size); /* Set base font size */
+    overflow: hidden; /* <-- ADD THIS LINE */
+}
+
+body {
+    font-family: 'Google Sans', Arial, sans-serif;
+    background-color: var(--background);
+    color: var(--primary-text);
+    overflow: hidden; /* Prevent body scrollbars */
+    line-height: 1.2; /* Slightly more spacing */
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Header Styles */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--wrapper-padding-x); /* Use variable */
+    height: var(--header-height);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: var(--background);
+    flex-shrink: 0;
+    transition: height var(--transition-speed) ease, padding var(--transition-speed) ease;
+}
+
+header .logo {
+    font-size: 1.3rem; /* Relative to base */
+    font-weight: 400;
+}
+
+header .logo a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.header-links {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Adjust gap as needed */
+}
+
+.icon-link {
+    font-size: 1.1rem; /* Relative */
+    opacity: 0.8;
+    transition: opacity var(--transition-speed) ease;
+}
+.icon-link:hover {
+    opacity: 1;
+}
+
+.profile-photo {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    overflow: hidden;
+    transition: width var(--transition-speed) ease, height var(--transition-speed) ease;
+}
+.profile-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Main content adjustments */
+main {
+    padding-top: var(--header-height); /* Space for fixed header */
+    padding-bottom: var(--footer-height); /* Space for fixed footer (updated by JS) */
+    flex: 1; /* Grow to fill space */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden; /* Contains children, prevents its own scroll */
+    box-sizing: border-box;
+    min-height: 0; /* Important for flex children */
+}
+
+/* Hero Section Styles */
+.hero-section {
+    text-align: center;
+    padding: 30px var(--wrapper-padding-x) 20px; /* Vertical padding */
+    max-width: 1200px;
+    margin: 0 auto; /* Center horizontally */
+    flex-shrink: 0; /* Don't shrink */
+    transition: padding var(--transition-speed) ease;
+}
+
+.hero-section h1 {
+    font-size: var(--hero-h1-size);
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: var(--secondary-text);
+    transition: font-size var(--transition-speed) ease;
+}
+
+.hero-section h2 {
+    font-size: var(--hero-h2-size);
+    font-weight: 400;
+    color: var(--secondary-text);
+    transition: font-size var(--transition-speed) ease;
+}
+
+.hero-section .italic {
+    font-style: italic;
+    color: var(--primary-text);
+}
+
+/* Tiles Container Styles */
+.tiles-container {
+    flex: 1; /* Grow to fill remaining space in main */
+    display: flex; /* Use flex to manage wrapper */
+    overflow: hidden; /* Hide any potential overflow */
+    min-height: 0; /* Important for flex children */
+    /* padding: 0 var(--wrapper-padding-x); Add padding here instead of wrapper? Maybe not needed */
+}
+
+.tiles-wrapper {
+    display: flex;
+    gap: var(--tile-gap);
+    overflow-x: auto; /* Enable horizontal scroll */
+    overflow-y: hidden; /* Disable vertical scroll */
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar IE/Edge */
+    padding: 10px var(--wrapper-padding-x) var(--wrapper-padding-bottom) var(--wrapper-padding-x); /* Top, R/L, Bottom */
+    cursor: grab;
+    width: 100%; /* Take full width of container */
+    height: 100%; /* Take full height of container */
+    align-items: center; /* Vertically center tiles */
+    transition: padding var(--transition-speed) ease, gap var(--transition-speed) ease;
+}
+.tiles-wrapper::-webkit-scrollbar { display: none; }
+
+/* Add class for active dragging state */
+.tiles-wrapper.active-drag {
+    cursor: grabbing;
+    scroll-behavior: auto; /* Ensure smooth scroll is off during grab */
+    user-select: none; /* Prevent text selection */
+}
+
+/* Tile Styles */
+.tile {
+    flex: 0 0 var(--tile-width); /* Use variable width */
+    height: var(--tile-height-vh); /* Relative height */
+    max-height: var(--tile-max-height); /* Absolute max */
+    min-height: var(--tile-min-height); /* Absolute min */
+    border-radius: 16px; /* Slightly larger radius */
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    filter: brightness(var(--dark-factor));
+    transition: filter var(--transition-speed) ease,
+                flex-basis var(--transition-speed) ease,
+                height var(--transition-speed) ease,
+                min-height var(--transition-speed) ease,
+                max-height var(--transition-speed) ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2); /* Add subtle shadow */
+}
+
+.tile:hover { filter: brightness(var(--light-factor)); }
+.tile[style*="background-color: #f4ce1b"]:hover { filter: brightness(var(--whisk-light-factor)); }
+
+.tile-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: var(--tile-padding); /* Use variable */
+    z-index: 2;
+    background: linear-gradient(to top, rgba(0,0,0,0.6) 10%, rgba(0,0,0,0.3) 60%, transparent 100%); /* Gradient for readability */
+    transition: padding var(--transition-speed) ease;
+}
+
+.tile h3 {
+    font-size: var(--tile-h3-size); /* Use variable */
+    font-weight: 500;
+    margin-bottom: 0.5em; /* Relative margin */
+    color: var(--primary-text);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    transition: font-size var(--transition-speed) ease;
+}
+
+.tile p {
+    font-size: var(--tile-p-size); /* Use variable */
+    margin-bottom: 1.2em; /* Relative margin */
+    opacity: 0.9;
+    color: var(--primary-text);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+    line-height: 1.4; /* Slightly more line height for paragraphs */
+    transition: font-size var(--transition-speed) ease;
+}
+
+.launch-button, .secondary-button {
+    background-color: var(--button-bg);
+    color: var(--button-text) !important; /* Override specificity */
+    border: none;
+    padding: 0.7em 1.2em; /* Relative padding */
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    width: fit-content;
+    margin-bottom: 8px;
+    font-size: var(--button-font-size); /* Use variable */
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: 'Google Sans', Arial, sans-serif;
+    transition: background-color var(--transition-speed) ease,
+                font-size var(--transition-speed) ease,
+                padding var(--transition-speed) ease;
+}
+.launch-button:hover, .secondary-button:hover {
+     background-color: var(--button-bg-hover);
+}
+
+.secondary-button { display: flex; align-items: center; gap: 8px; }
+.secondary-button i { font-size: 0.8em; } /* Relative */
+
+/* Base shape styles */
+.whisk-shape, .videofx-shape, .imagefx-shape, .musicfx-shape,
+.extra-shape-1, .extra-shape-2, .extra-shape-3, .extra-shape-4 {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1; opacity: 0;
+    transition: opacity 0.5s ease; /* Slower fade */
+}
+/* Show shapes on hover OR when auto-highlighted */
+.tile:hover [class*="-shape"], /* Use 'contains' selector */
+.tile.auto-highlight [class*="-shape"] {
+    opacity: 1;
+}
+
+/* --- Shape definitions and keyframes remain unchanged --- */
+/* Whisk Shape ... */
+.whisk-curve { position: absolute; width: 150px; height: 220px; border: 20px solid rgba(0, 0, 0, 0.7); border-radius: 100px; border-top-right-radius: 0; border-bottom-right-radius: 0; border-right: 0; top: 150px; right: 10px; transform: rotate(30deg); animation: whiskCurveMove var(--animation-duration) infinite alternate ease-in-out; }
+.whisk-bolt { position: absolute; width: 30px; height: 60px; background-color: rgba(0, 0, 0, 0.7); clip-path: polygon(50% 0%, 10% 50%, 50% 50%, 0% 100%, 90% 50%, 50% 50%); top: 250px; left: 60px; transform: rotate(20deg); animation: whiskBoltMove var(--animation-duration) infinite alternate ease-in-out; }
+.whisk-dot { position: absolute; width: 30px; height: 30px; background-color: rgba(0, 0, 0, 0.7); border-radius: 50%; top: 150px; left: 120px; animation: whiskDotMove var(--animation-duration) infinite alternate ease-in-out; }
+@keyframes whiskCurveMove { 0%, 100% { transform: rotate(30deg); } 25% { transform: rotate(40deg) scale(1.1); } 50% { transform: rotate(35deg) translateY(-15px); } 75% { transform: rotate(25deg) scale(0.95); } }
+@keyframes whiskBoltMove { 0%, 100% { transform: rotate(20deg); } 25% { transform: rotate(40deg) scale(1.2); } 50% { transform: rotate(10deg) translateX(15px); } 75% { transform: rotate(30deg) scale(0.8); } }
+@keyframes whiskDotMove { 0%, 100% { transform: scale(1); } 25% { transform: translateY(-20px) scale(1.2); } 50% { transform: translateX(15px) scale(0.8); } 75% { transform: translateY(10px) translateX(-10px) scale(1.1); } }
+/* VideoFX Shape ... */
+.arrow-group { position: absolute; top: 50%; right: 0; left: 0; transform: translateY(-50%); width: 100%; height: 100%; display: flex; justify-content: center; }
+.arrow-group::before, .arrow-group::after { content: '◀ ◀◀ ◀◀◀'; position: absolute; font-size: 24px; line-height: 1.5; color: rgba(0, 0, 0, 0.7); letter-spacing: 5px; background-image: none; }
+.arrow-group::before { right: 30%; top: 30%; transform: translateX(0); animation: arrowMove var(--animation-duration) infinite alternate ease-in-out; }
+.arrow-group::after { right: 20%; top: 50%; transform: translateX(0); animation: arrowMove2 var(--animation-duration) infinite alternate ease-in-out; }
+@keyframes arrowMove { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-20px); } }
+@keyframes arrowMove2 { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-30px); } }
+/* ImageFX Shape ... */
+.square-group { position: absolute; top: 0; right: 0; width: 100%; height: 100%; overflow: hidden; }
+.imagefx-shape .square-group::after { content: ''; position: absolute; width: 100%; height: 100%; right: 0; top: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(0,0,0,0.7)'%3E%3Cpath d='M3 3h18v18H3V3z'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(0,0,0,0.7)'%3E%3Cpath d='M3 3h18v18H3V3z'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(0,0,0,0.7)'%3E%3Cpath d='M3 3h18v18H3V3z'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(0,0,0,0.7)'%3E%3Cpath d='M3 3h18v18H3V3z'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(0,0,0,0.7)'%3E%3Cpath d='M3 3h18v18H3V3z'/%3E%3C/svg%3E"), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='rgba(0,0,0,0.7)'%3E%3Cpath d='M3 3h18v18H3V3z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-size: 20px 20px, 30px 30px, 40px 40px, 25px 25px, 35px 35px, 45px 45px; background-position: calc(100% - 70px) 170px, calc(100% - 30px) 140px, calc(100% - 110px) 210px, calc(100% - 50px) 240px, calc(100% - 80px) 290px, calc(100% - 20px) 340px; }
+/* MusicFX Shape ... */
+.wave-group { position: absolute; top: 0; right: 0; width: 100%; height: 100%; }
+.wave-group::after { content: ''; position: absolute; width: 40%; height: 50%; right: 20%; top: 25%; background-image: linear-gradient(to bottom, transparent 30%, rgba(0, 0, 0, 0.7) 30%, rgba(0, 0, 0, 0.7) 70%, transparent 70%), linear-gradient(to bottom, transparent 10%, rgba(0, 0, 0, 0.7) 10%, rgba(0, 0, 0, 0.7) 90%, transparent 90%), linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0.7) 60%, transparent 60%), linear-gradient(to bottom, transparent 20%, rgba(0, 0, 0, 0.7) 20%, rgba(0, 0, 0, 0.7) 80%, transparent 80%), linear-gradient(to bottom, transparent 15%, rgba(0, 0, 0, 0.7) 15%, rgba(0, 0, 0, 0.7) 85%, transparent 85%), linear-gradient(to bottom, transparent 25%, rgba(0, 0, 0, 0.7) 25%, rgba(0, 0, 0, 0.7) 75%, transparent 75%), linear-gradient(to bottom, transparent 35%, rgba(0, 0, 0, 0.7) 35%, rgba(0, 0, 0, 0.7) 65%, transparent 65%), linear-gradient(to bottom, transparent 45%, rgba(0, 0, 0, 0.7) 45%, rgba(0, 0, 0, 0.7) 55%, transparent 55%); background-size: 10px 100%; background-position: 0px 0px, 15px 0px, 30px 0px, 45px 0px, 60px 0px, 75px 0px, 90px 0px, 105px 0px; background-repeat: no-repeat; animation: waveAnimation var(--animation-duration) infinite alternate ease-in-out; }
+@keyframes waveAnimation { 0% { background-size: 10px 60%, 10px 80%, 10px 50%, 10px 70%, 10px 85%, 10px 65%, 10px 75%, 10px 55%; } 50% { background-size: 10px 80%, 10px 60%, 10px 70%, 10px 50%, 10px 65%, 10px 85%, 10px 55%, 10px 75%; } 100% { background-size: 10px 70%, 10px 85%, 10px 55%, 10px 80%, 10px 50%, 10px 75%, 10px 65%, 10px 60%; } }
+/* Extra shapes ... */
+.extra-shape-1, .extra-shape-2, .extra-shape-3, .extra-shape-4 { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
+.extra-shape-1::before { content: ''; position: absolute; width: 200px; height: 200px; border-radius: 50%; border: 20px solid rgba(0, 0, 0, 0.6); top: 150px; left: 50px; animation: circlePulse var(--animation-duration) infinite alternate ease-in-out; }
+.extra-shape-1::after { content: ''; position: absolute; width: 80px; height: 150px; border: 15px solid rgba(0, 0, 0, 0.5); border-radius: 40px; top: 200px; right: 60px; animation: rectangleSpin var(--animation-duration) infinite alternate ease-in-out; }
+@keyframes circlePulse { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.1) translateY(-20px); } 50% { transform: scale(0.9) translateX(15px); } 75% { transform: scale(1.05) translate(-10px, 10px); } }
+@keyframes rectangleSpin { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(45deg) scale(0.9); } 50% { transform: rotate(-30deg) scale(1.1); } 75% { transform: rotate(15deg) scale(1.05); } }
+.extra-shape-2 { position: relative; }
+.extra-shape-2::before { content: ''; position: absolute; width: 150px; height: 150px; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); background-color: rgba(0, 0, 0, 0.5); top: 150px; left: 40px; animation: triangleMove var(--animation-duration) infinite alternate ease-in-out; }
+.extra-shape-2::after { content: ''; position: absolute; width: 120px; height: 120px; clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); background-color: rgba(0, 0, 0, 0.6); bottom: 180px; right: 40px; animation: diamondSpin var(--animation-duration) infinite alternate ease-in-out; }
+@keyframes triangleMove { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-30px) rotate(30deg); } 50% { transform: translateY(20px) rotate(-20deg); } 75% { transform: translateY(-10px) rotate(10deg); } }
+@keyframes diamondSpin { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(45deg) scale(1.1); } 50% { transform: rotate(-30deg) scale(0.9); } 75% { transform: rotate(15deg) translateY(-20px); } }
+.extra-shape-3 { position: relative; }
+.extra-shape-3::before { content: ''; position: absolute; width: 180px; height: 20px; background-color: rgba(0, 0, 0, 0.5); top: 180px; left: 60px; animation: lineStretch var(--animation-duration) infinite alternate ease-in-out; }
+.extra-shape-3::after { content: ''; position: absolute; width: 20px; height: 180px; background-color: rgba(0, 0, 0, 0.5); top: 100px; left: 140px; animation: lineRotate var(--animation-duration) infinite alternate ease-in-out; }
+@keyframes lineStretch { 0%, 100% { transform: scaleX(1); } 25% { transform: scaleX(0.8) translateY(-20px); } 50% { transform: scaleX(1.2) translateY(15px); } 75% { transform: scaleX(1.1) translateY(-5px) rotate(5deg); } }
+@keyframes lineRotate { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(30deg) translateX(20px); } 50% { transform: rotate(-20deg) translateY(-15px); } 75% { transform: rotate(10deg) translate(10px, 10px); } }
+.extra-shape-4 { position: relative; }
+.extra-shape-4::before { content: ''; position: absolute; width: 100px; height: 100px; border-radius: 10px; border: 15px solid rgba(0, 0, 0, 0.5); top: 150px; left: 50px; transform: rotate(45deg); animation: squareRotate var(--animation-duration) infinite alternate ease-in-out; }
+.extra-shape-4::after { content: ''; position: absolute; width: 40px; height: 40px; border-radius: 50%; background-color: rgba(0, 0, 0, 0.6); top: 250px; right: 60px; animation: dotFloat var(--animation-duration) infinite alternate ease-in-out; box-shadow: -60px -30px 0 rgba(0, 0, 0, 0.4), -30px -60px 0 rgba(0, 0, 0, 0.5), -90px -60px 0 rgba(0, 0, 0, 0.3); }
+@keyframes squareRotate { 0%, 100% { transform: rotate(45deg); } 25% { transform: rotate(60deg) scale(1.1); } 50% { transform: rotate(30deg) scale(0.9); } 75% { transform: rotate(50deg) translateY(-15px); } }
+@keyframes dotFloat { 0%, 100% { transform: translateY(0); } 25% { transform: translateY(-15px) translateX(10px); } 50% { transform: translateY(10px) translateX(-15px); } 75% { transform: translateY(-5px) translateX(-5px); } }
+/* --- End Shape definitions --- */
+
+
+/* Footer Styles */
+footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--wrapper-padding-x); /* Use variable */
+    height: var(--footer-height);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background-color: var(--background);
+    flex-shrink: 0;
+    /* Visibility handled by JS */
+    visibility: visible; /* Default */
+    opacity: 1; /* Default */
+    transition: visibility 0s linear var(--transition-speed), /* Delay hiding */
+                opacity var(--transition-speed) ease,
+                height var(--transition-speed) ease,
+                padding var(--transition-speed) ease;
+}
+footer.hidden { /* Class potentially added by JS (alternative to direct style) */
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 0s, opacity var(--transition-speed) ease; /* Hide immediately */
+}
+
+
+footer .logo {
+    font-size: 1.3rem; /* Relative */
+    font-weight: 400;
+}
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+.footer-links a {
+    font-size: 0.9rem; /* Relative */
+    color: var(--secondary-text);
+    opacity: 0.8;
+    transition: opacity var(--transition-speed) ease;
+}
+.footer-links a:hover { opacity: 1; }
+
+
+/* Modal/Popup Styles */
+.modal {
+    display: none; position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.85); /* Slightly darker backdrop */
+    z-index: 1000;
+    justify-content: center; align-items: center;
+    backdrop-filter: blur(8px); /* More blur */
+    opacity: 0;
+    transition: opacity var(--transition-speed) ease;
+}
+.modal-content {
+    background-color: #1a1a1a; /* Slightly lighter than pure black */
+    width: 90%; max-width: 800px; max-height: 90vh;
+    border-radius: 12px;
+    overflow-y: auto;
+    padding: 30px 40px; /* More horizontal padding */
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    color: var(--primary-text);
+}
+.close-modal {
+    position: absolute; top: 15px; right: 15px;
+    font-size: 1.8rem; cursor: pointer;
+    color: var(--secondary-text);
+    transition: color var(--transition-speed) ease;
+    padding: 5px; line-height: 1;
+}
+.close-modal:hover { color: var(--primary-text); }
+.modal-body { padding: 10px 0; }
+.modal-body h2 {
+    font-size: 2.2rem; /* Relative */
+    font-weight: 500; /* Slightly bolder */
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
+.modal-body p {
+    font-size: 1rem; /* Relative */
+    line-height: 1.7; /* More line height in modal */
+    margin-bottom: 24px;
+    color: #ccc; /* Lighter secondary text */
+}
+.tech-stack { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+.tech-item {
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 8px 16px; border-radius: 20px;
+    font-size: 0.9rem; /* Relative */
+}
+.modal-body img { width: 100%; border-radius: 8px; margin-bottom: 24px; }
+.links { display: flex; flex-wrap: wrap; gap: 16px; }
+.links a {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 20px; border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--primary-text);
+    font-size: 0.9rem; /* Relative */
+    font-weight: 500;
+    transition: background-color var(--transition-speed) ease;
+}
+.links a:hover { background-color: rgba(255, 255, 255, 0.2); }
+
+/* Auto-highlight class for sequence animation */
+.tile.auto-highlight {
+    filter: brightness(var(--light-factor)) !important;
+    transition: filter 0.5s ease;
+}
+.tile[style*="background-color: #f4ce1b"].auto-highlight {
+    filter: brightness(var(--whisk-light-factor)) !important;
+}
+
+/* --- RESPONSIVENESS --- */
+
+/* Medium Laptops / Larger Tablets (Landscape) */
+@media (max-width: 1200px) {
+    :root {
+        --base-font-size: 15px;
+        --hero-h2-size: 46px;
+        --tile-width: 320px;
+        --tile-height-vh: 67vh;
+        --tile-max-height: 600px;
+        --tile-min-height: 380px;
+        --tile-gap: 12px;
+        --tile-padding: 28px;
+        --tile-h3-size: 26px;
+        --wrapper-padding-x: 25px;
+    }
+}
+
+/* Tablets (Portrait) / Smaller Laptops */
+@media (max-width: 992px) {
+    :root {
+        --base-font-size: 14px;
+        --header-height: 64px;
+        --footer-height: 56px;
+        --hero-h1-size: 18px;
+        --hero-h2-size: 40px;
+        --tile-width: 300px;
+        --tile-height-vh: 66vh;
+        --tile-max-height: 550px;
+        --tile-min-height: 350px;
+        --tile-gap: 10px;
+        --tile-padding: 24px;
+        --tile-h3-size: 24px;
+        --tile-p-size: 13px;
+        --button-font-size: 12px;
+        --wrapper-padding-x: 20px;
+    }
+    .header-links { gap: 15px; }
+    .profile-photo { width: 30px; height: 30px; }
+    .modal-content { max-width: 90%; padding: 25px 30px; }
+    .modal-body h2 { font-size: 2rem; }
+}
+
+/* Mobile (Landscape) / Large Phones */
+@media (max-width: 768px) {
+    :root {
+        /* Base font slightly larger for mobile readability */
+        --base-font-size: 15px;
+        --header-height: 60px;
+        --footer-height: 52px;
+        --hero-h1-size: 16px;
+        --hero-h2-size: 34px;
+        --tile-width: 260px; /* Significantly smaller tiles */
+        --tile-height-vh: 65vh;
+        --tile-max-height: 480px;
+        --tile-min-height: 300px;
+        --tile-gap: 8px;
+        --tile-padding: 20px;
+        --tile-h3-size: 22px;
+        --tile-p-size: 13px; /* Keep p readable */
+        --button-font-size: 11px;
+        --wrapper-padding-x: 15px;
+        --wrapper-padding-bottom: 15px;
+    }
+    .header-links { gap: 12px; }
+    .icon-link { font-size: 1rem; }
+    .profile-photo { width: 28px; height: 28px; }
+    .footer-links a { font-size: 0.8rem; }
+    .modal-content { padding: 20px 25px; }
+    .modal-body h2 { font-size: 1.8rem; }
+    .modal-body p { font-size: 0.95rem; }
+    .tech-item { font-size: 0.85rem; padding: 6px 12px; }
+    .links a { font-size: 0.85rem; padding: 10px 16px; }
+}
+
+/* Mobile (Portrait) */
+@media (max-width: 576px) {
+    :root {
+        --hero-h1-size: 15px;
+        --hero-h2-size: 30px;
+        --tile-width: 230px; /* Even smaller */
+        --tile-height-vh: 63vh;
+        --tile-max-height: 420px;
+        --tile-min-height: 280px;
+        --tile-gap: 8px;
+        --tile-padding: 18px;
+        --tile-h3-size: 20px;
+        --tile-p-size: 12px;
+        --wrapper-padding-x: 10px;
+    }
+    .hero-section { padding: 20px var(--wrapper-padding-x) 15px; }
+    .modal-body h2 { font-size: 1.6rem; }
+}
+
+/* --- Height-based Adjustments --- */
+
+/* Shorter screens (e.g., typical laptop height) */
+@media (max-height: 850px) {
+    :root {
+        --tile-height-vh: 65vh; /* Adjust vh */
+        --tile-max-height: 580px; /* Adjust max */
+    }
+     .hero-section { padding-top: 20px; padding-bottom: 15px; }
+}
+
+/* Even shorter screens */
+@media (max-height: 720px) {
+    :root {
+        --base-font-size: 14px; /* Reduce base font on short screens */
+        --header-height: 60px;
+        --footer-height: 52px;
+        --tile-height-vh: 60vh;
+        --tile-max-height: 450px;
+        --tile-min-height: 280px; /* Lower min height */
+    }
+    .hero-section { padding-top: 15px; padding-bottom: 10px; }
+    /* Reduce hero text size more aggressively */
+    @media (min-width: 769px) { /* Only if screen is also wide */
+        :root {
+            --hero-h2-size: 36px;
+        }
+    }
+}
+
+/* Very short screens */
+@media (max-height: 600px) {
+    :root {
+        --header-height: 54px;
+        --footer-height: 48px;
+        --tile-height-vh: 58vh;
+        --tile-max-height: 380px;
+        --tile-min-height: 240px;
+        --tile-h3-size: 18px; /* Smaller fonts in tiles */
+        --tile-p-size: 11px;
+        --button-font-size: 10px;
+        --tile-padding: 16px;
+    }
+    .hero-section { display: none; } /* Hide hero on very short screens */
+}

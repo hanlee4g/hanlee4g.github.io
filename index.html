@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>labs.google/hanjune</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="images/site.webmanifest">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="#">@hanjune</a>
+        </div>
+        <div class="header-links">
+            <a href="mailto:hanjune@google.com" class="icon-link">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="https://linkedin.com/in/hanjunelee" target="_blank" class="icon-link">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a class="profile-photo" href="https://moma.corp.google.com/person/hanjune" target="_blank" class="icon-link">
+                <img src="images/profile.jpg" alt="Profile Photo">
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="hero-section">
+            <h1>Hire Han as an APM2 to help Google</h1>
+            <h2>Chase the <span class="italic">Future.</span></h2>
+        </div>
+
+        <div class="tiles-container">
+            <div class="tiles-wrapper">
+                <!-- Whisk Tile -->
+                <div class="tile" style="background-color: #f4ce1b;">
+                    <div class="whisk-shape">
+                        <div class="whisk-curve"></div>
+                        <div class="whisk-bolt"></div>
+                        <div class="whisk-dot"></div>
+                    </div>
+                    <div class="tile-content">
+                        <h3 class="whisk-text">Google</h3>
+                        <p class="whisk-text">Experience in P&D, GCP, Core</p>
+                        <button class="launch-button whisk-button">LEARN MORE →</button>
+                    </div>
+                </div>
+
+                <!-- VideoFX Tile -->
+                <div class="tile" style="background-color: #5c88a1;">
+                    <div class="videofx-shape">
+                        <div class="arrow-group"></div>
+                    </div>
+                    <div class="tile-content">
+                        <h3 class="videofx-text">APM Program</h3>
+                        <p class="videofx-text">Startup Circle, Alumni Database, Trip Planning</p>
+                        <button class="launch-button videofx-button">LEARN MORE →</button>
+                    </div>
+                </div>
+
+                <!-- ImageFX Tile -->
+                <div class="tile" style="background-color: #5f6fc9;">
+                    <div class="imagefx-shape">
+                        <div class="square-group"></div>
+                    </div>
+                    <div class="tile-content">
+                        <h3 class="imagefx-text">Northwestern</h3>
+                        <p class="imagefx-text">BA in Computer Science & Legal Studies</p>
+                        <button class="launch-button imagefx-button">GO CATS →</button>
+                    </div>
+                </div>
+
+                <!-- MusicFX Tile -->
+                <div class="tile" style="background-color: #f4a9d8;">
+                    <div class="musicfx-shape">
+                        <div class="wave-group"></div>
+                    </div>
+                    <div class="tile-content">
+                        <h3 class="musicfx-text">Current Projects</h3>
+                        <p class="musicfx-text">Essay Grading, Contituent Engagement, Customer Support Agent</p>
+                        <button class="launch-button musicfx-button">LEARN MORE →</button>
+                    </div>
+                </div>
+
+                <!-- Additional Tiles (Maintaining the same styling for extras) -->
+                <div class="tile" style="background-color: #A8714C;">
+                    <div class="extra-shape-2"></div>
+                    <div class="tile-content">
+                        <h3 class="extra2-text">Inbound</h3>
+                        <p class="extra2-text">Founded an HR Software Startup</p>
+                        <button class="launch-button extra2-button">LEARN MORE →</button>
+                    </div>
+                </div>
+
+                <div class="tile" style="background-color: #506B57;">
+                    <div class="extra-shape-1"></div>
+                    <div class="tile-content">
+                        <h3 class="extra1-text">Startup Internships</h3>
+                        <p class="extra1-text">Soundskrit, Onaroll, Techstars, Bessemer</p>
+                        <button class="launch-button extra1-button">LEARN MORE →</button>
+                    </div>
+                </div>
+                
+                <div class="tile" style="background-color: #6A7645;">
+                    <div class="extra-shape-3"></div>
+                    <div class="tile-content">
+                        <h3 class="extra3-text">Hobbies</h3>
+                        <p class="extra3-text">Volleyball, Fitness, Travel, Meditation</p>
+                        <button class="launch-button extra3-button">LEARN MORE →</button>
+                    </div>
+                </div>
+                
+                <div class="tile" style="background-color: #654C5D;">
+                    <div class="extra-shape-4"></div>
+                    <div class="tile-content">
+                        <h3 class="extra4-text">Books</h3>
+                        <p class="extra4-text">What I read this year</p>
+                        <button class="launch-button extra4-button">LEARN MORE →</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="logo">Google</div>
+        <div class="footer-links">
+            <a>Created with Cursor, Google AI Studio, Gemini 2.5 Pro Preview, Claude 3.7 Sonnet Thinking</a>
+        </div>
+    </footer>
+
+    <!-- Modal/Popup for experiences -->
+    <div class="modal" id="experienceModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-body">
+                <!-- Content will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
