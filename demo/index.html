@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reuben App Demo</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script type="module">
+      // For Google Generative AI SDK if you are using it directly.
+      // If using Vercel AI SDK, it might be handled differently or globally.
+      // Ensure this path is correct or SDK is loaded appropriately.
+      // import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+    </script>
+</head>
+<body>
+    <div class="api-key-input-container" style="position: fixed; top: 10px; left: 10px; z-index: 1000; background: #333; padding: 10px; border-radius: 5px; display: none;">
+        <label for="apiKey" style="color: white; margin-right: 5px;">Gemini API Key:</label>
+        <input type="password" id="apiKey" name="apiKey" size="30">
+        <button id="saveApiKey" style="margin-left: 5px;">Set</button>
+        <p id="apiKeyStatus" style="color: #ffcc00; font-size: 0.8em; margin-top: 5px;"></p>
+    </div>
+
+    <div class="mobile-frame">
+        <div class="app-container">
+            <header class="app-header-card">
+                <span class="header-title">Create new</span>
+                <div class="header-icons">
+                    <span class="icon close-icon">✕</span>
+                </div>
+            </header>
+
+            <section class="genre-section">
+                <h2 class="section-title">Genre</h2>
+                <div class="tabs">
+                    <button class="tab-button active" data-tab="custom">Custom</button>
+                    <button class="tab-button" data-tab="inspiration">Inspiration</button>
+                    <button class="tab-button" data-tab="select">Select</button>
+                </div>
+
+                <div class="tab-content-area">
+                    <div class="tab-content active" id="custom-content">
+                        <textarea placeholder="Describe how you want your music to sound"></textarea>
+                    </div>
+
+                    <div class="tab-content" id="inspiration-content">
+                        <!-- Inspiration content will be loaded here -->
+                    </div>
+
+                    <div class="tab-content" id="select-content">
+                        <div class="genre-grid">
+                            <button class="genre-button">R&B</button>
+                            <button class="genre-button">Pop</button>
+                            <button class="genre-button">Country</button>
+                            <button class="genre-button">Classical</button>
+                            <button class="genre-button">Punk</button>
+                            <button class="genre-button">Hip Hop</button>
+                            <button class="genre-button">Rock</button>
+                            <button class="genre-button">Reggae</button>
+                            <button class="genre-button">Jazz</button>
+                            <button class="genre-button">EDM</button>
+                            <button class="genre-button">Metal</button>
+                            <button class="genre-button">K-Pop</button>
+                            <button class="genre-button">Folk</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="placeholder-section lyrics-section">
+                <span class="section-title-inline">Lyrics</span>
+                <span class="icon edit-icon">✎</span>
+            </section>
+
+            <section class="placeholder-section voice-section">
+                <div class="voice-info">
+                    <span class="section-title-inline">Voice</span>
+                    <span class="voice-placeholder">Your Voice</span>
+                </div>
+                <span class="icon edit-icon">✎</span>
+            </section>
+
+            <footer class="footer">
+                <button class="create-loop-button">
+                    Create loop
+                </button>
+            </footer>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>

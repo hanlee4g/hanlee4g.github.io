@@ -1,0 +1,389 @@
+:root {
+    --app-bg: #121212;
+    --card-bg: #1E1E1E; /* For cards like Genre, Lyrics, Voice, and new Header */
+    --element-bg: #282828; /* For buttons, text area background */
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3B3B3;
+    --accent-green: #1DB954;
+    --faded-green-button: #1A4D30; /* Darker, less saturated green for inactive button */
+    --faded-green-button-text: #8c9691; /* Text color for faded green button */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --card-border-radius: 12px; /* Consistent border radius for cards */
+    --tab-content-height: 280px; /* Fixed height for tab content area */
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 20px;
+    padding-bottom: 20px; /* Ensure space for scrolling if mobile frame is tall */
+    color: var(--text-primary);
+}
+
+.mobile-frame {
+    width: 375px;
+    max-height: 812px;
+    background-color: var(--app-bg);
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-container {
+    width: 100%;
+    height: 100%;
+    padding: 15px; /* Reduced padding slightly */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.app-container::-webkit-scrollbar { display: none; }
+.app-container { -ms-overflow-style: none; scrollbar-width: none; }
+
+.app-header-card {
+    background-color: var(--card-bg);
+    border-radius: var(--card-border-radius);
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-title {
+    font-size: 1.5em; /* Slightly reduced from 1.8em */
+    font-weight: 600;
+}
+
+.header-icons .icon {
+    font-size: 1.4em;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+.header-icons .close-icon {
+    font-weight: 600; /* Make X bolder like screenshot */
+}
+
+
+.section-title {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-left: 5px; /* Small indent like screenshot */
+}
+
+.genre-section {
+    background-color: var(--card-bg);
+    border-radius: var(--card-border-radius);
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-between; /* Distributes Custom, Inspiration, Select */
+    margin-bottom: 20px; /* Increased space */
+    border-bottom: 1px solid var(--element-bg);
+    padding: 0 5px; /* Align tab underlines with content below */
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    padding: 10px 0px; /* Reduced horizontal padding to let space-between work */
+    font-size: 0.95em;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+    font-family: var(--font-family);
+    flex-grow: 0; /* Don't let them grow, rely on text width + padding */
+    flex-shrink: 0;
+    text-align: center; /* Center text within button space */
+}
+/* Give select a bit more to push it right for visual balance if needed */
+.tab-button[data-tab="select"] {
+    /* text-align: right; if needed for further adjustment */
+}
+
+
+.tab-button.active {
+    color: var(--text-primary);
+}
+
+.tab-button.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--accent-green);
+    border-radius: 2px;
+}
+
+.tab-content-area {
+    height: var(--tab-content-height); /* Fixed height for consistency */
+    overflow: hidden; /* Hide overflow if content is slightly larger */
+}
+
+.tab-content {
+    display: none;
+    height: 100%; /* Take full height of parent */
+    box-sizing: border-box;
+}
+
+.tab-content.active {
+    display: flex; /* Use flex for custom content's textarea to fill space */
+    flex-direction: column;
+}
+
+#custom-content textarea {
+    width: 100%;
+    flex-grow: 1; /* Make textarea fill available vertical space */
+    background-color: var(--element-bg); /* Changed from app-bg to element-bg */
+    border: none; /* Removed border from screenshot */
+    border-radius: 8px;
+    padding: 12px;
+    box-sizing: border-box;
+    color: var(--text-primary);
+    font-family: var(--font-family);
+    font-size: 0.95em; /* Slightly larger */
+    line-height: 1.5;
+    resize: none;
+}
+
+#custom-content textarea::placeholder {
+    color: var(--text-secondary);
+}
+
+#select-content { /* Ensure this has full height of its container */
+    height: 100%;
+    display: flex; /* Added */
+    flex-direction: column; /* Added */
+}
+
+.genre-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Slightly smaller min for more items per row */
+    gap: 10px;
+    padding-top: 5px;
+    /* REMOVE height: 100%; -- Let content define its height, but scroll within the parent */
+    overflow-y: auto; /* This allows scrolling WITHIN the grid if content overflows #select-content's height */
+    align-content: start; /* IMPORTANT: Prevents items from stretching vertically if grid has extra space */
+}
+/* Custom scrollbar for genre grid (optional but consistent) */
+.genre-grid::-webkit-scrollbar { width: 6px; }
+.genre-grid::-webkit-scrollbar-track { background: transparent; } /* transparent or var(--element-bg) */
+.genre-grid::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: 3px; }
+
+.genre-button {
+    background-color: var(--element-bg);
+    color: var(--text-primary);
+    border: none;
+    border-radius: 6px;
+    padding: 10px 12px; /* You can adjust padding if needed */
+    font-size: 0.9em; /* Ensure this is not too large */
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+    font-family: var(--font-family);
+    text-align: center;
+    /* Ensure buttons don't stretch unnecessarily if there's extra space in their grid cell */
+    /* height: auto; /* Default, but good to be explicit */
+    /* aspect-ratio: 2 / 1; /* Optional: If you want a specific aspect ratio, adjust padding instead */
+    line-height: 1.2; /* Adjust if text wrapping makes them too tall */
+    min-height: 38px; /* Example: give a sensible minimum height to prevent them from being too squashed */
+}
+
+.genre-button:hover {
+    background-color: #3f3f3f;
+}
+
+.genre-button.selected {
+    background-color: var(--accent-green);
+    color: var(--text-primary);
+}
+
+#inspiration-content {
+    height: 100%;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+#inspiration-content::-webkit-scrollbar { width: 6px; }
+#inspiration-content::-webkit-scrollbar-track { background: var(--element-bg); border-radius: 3px; }
+#inspiration-content::-webkit-scrollbar-thumb { background: var(--text-secondary); border-radius: 3px; }
+#inspiration-content::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+
+
+.loading-message {
+    text-align: center;
+    padding: 20px;
+    color: var(--text-secondary);
+    font-style: italic;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inspiration-item {
+    background-color: var(--element-bg);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.inspiration-item.selected {
+    border-color: var(--accent-green);
+}
+
+.inspiration-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Adjust spacing for popular details if read-more is present */
+.inspiration-item .inspiration-popular-details {
+    margin-top: 8px; /* Default margin */
+}
+.inspiration-item .read-more-toggle + .inspiration-popular-details {
+    margin-top: 4px; /* Slightly less margin if read-more is directly above */
+}
+
+
+.inspiration-label {
+    font-size: 0.75em;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.inspiration-prompt {
+    font-size: 0.9em;
+    line-height: 1.4; /* Important for consistent line height calculation */
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    /* Default truncation to 4 lines */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4; /* Default number of lines */
+    /* Fallback for browsers that don't support -webkit-line-clamp, though support is good */
+    /* max-height: calc(1.4em * 4); /* line-height * number of lines */
+    position: relative; /* For potential future absolute positioned elements like fade-out */
+}
+
+.inspiration-prompt.expanded {
+    -webkit-line-clamp: unset; /* Remove line clamp */
+    display: block; /* Or its natural display type if it was different */
+    /* max-height: none; /* Remove max-height if using fallback */
+    overflow: visible;
+}
+
+.read-more-toggle {
+    display: none; /* Hidden by default, shown by JS if needed */
+    margin-top: 4px; /* Space above the link */
+    font-size: 0.85em;
+    font-weight: 500;
+    color: var(--accent-green);
+    cursor: pointer;
+    text-decoration: none; /* If it's an <a> tag */
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: var(--font-family);
+}
+.read-more-toggle:hover {
+    text-decoration: underline;
+}
+
+
+.inspiration-popular-details {
+    display: flex;
+    align-items: center;
+    font-size: 0.8em;
+    color: var(--text-secondary);
+}
+
+.profile-pics img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: -8px;
+    border: 1px solid var(--card-bg);
+}
+
+.profile-pics {
+    display: flex;
+    margin-right: 8px;
+}
+
+.placeholder-section {
+    background-color: var(--card-bg);
+    border-radius: var(--card-border-radius);
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.section-title-inline {
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+.voice-section .voice-info {
+    display: flex;
+    align-items: center;
+}
+.voice-section .section-title-inline {
+    margin-right: 10px; /* Space between "Voice" and "Your Voice" */
+}
+
+.voice-placeholder {
+    color: var(--text-secondary);
+    font-size: 1.0em;
+}
+
+.edit-icon {
+    font-size: 1.3em; /* Slightly larger */
+    color: var(--accent-green); /* Green color */
+    cursor: default;
+    transform: scaleX(-1); /* Flip horizontally */
+}
+
+.footer {
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.create-loop-button {
+    background-color: var(--faded-green-button); /* Faded green */
+    color: var(--faded-green-button-text); /* Lighter text for contrast */
+    border: none;
+    border-radius: 25px;
+    padding: 15px 20px;
+    font-size: 1em;
+    font-weight: 600; /* Bolder like screenshot */
+    width: 100%;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-family);
+}
+
