@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance AI - Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --app-bg-color: #202123;
+            --app-bg-secondary-color: #343541;
+            --app-text-color: #ECECF1;
+            --app-text-secondary-color: #A9A9B3;
+            --app-accent-color: #50C878; /* Emerald Green */
+            --app-accent-color-darker: #3E9C62;
+            --app-user-message-bg: #40414F;
+            --app-border-color: #4A4C50;
+            --success-color: #22c55e;
+            --error-color: #ef4444;
+            --neutral-color: #9CA3AF;
+
+            --page-bg-color: #f0f2f5;
+            --panel-bg-color: #ffffff;
+            --panel-border-color: #e0e0e0;
+
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        body {
+            font-family: var(--font-family);
+            margin: 0;
+            background-color: var(--page-bg-color);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .page-wrapper {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 900px;
+            align-items: flex-start;
+        }
+
+        .config-panel {
+            background-color: var(--panel-bg-color);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            flex-basis: 280px;
+            flex-shrink: 0;
+            border: 1px solid var(--panel-border-color);
+        }
+
+        .config-panel h2 {
+            margin-top: 0;
+            font-size: 1.2em;
+            color: #333;
+            border-bottom: 1px solid var(--panel-border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .config-panel label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
+            color: #555;
+            margin-top: 15px;
+        }
+        .config-panel label:first-of-type {
+            margin-top: 0;
+        }
+
+        .config-panel input[type="password"],
+        .config-panel input[type="text"],
+        .config-panel input[type="file"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid var(--panel-border-color);
+            border-radius: 6px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .config-panel input[type="file"] {
+            padding: 6px 10px;
+        }
+
+         .config-panel button {
+            background-color: var(--app-accent-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            width: 100%;
+            margin-top: 5px;
+        }
+        .config-panel button:hover {
+            background-color: var(--app-accent-color-darker);
+        }
+        #configStatus, #dataStatus {
+            font-size:0.85em;
+            margin-top:10px;
+            line-height: 1.4;
+        }
+
+        .app-container {
+            background-color: var(--app-bg-color);
+            color: var(--app-text-color);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2), 0 0 0 8px #111;
+            width: 390px;
+            height: 844px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header {
+            background-color: var(--app-accent-color);
+            color: white;
+            padding: 16px 20px;
+            text-align: center;
+            font-size: 1.25em;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: var(--app-bg-secondary-color);
+            flex-shrink: 0;
+        }
+
+        .tab-button {
+            flex-grow: 1;
+            padding: 14px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background-color: transparent;
+            font-size: 0.95em;
+            font-weight: 500;
+            color: var(--app-text-secondary-color);
+            border-bottom: 3px solid transparent;
+            transition: color 0.2s, border-bottom-color 0.2s;
+        }
+
+        .tab-button.active {
+            color: var(--app-accent-color);
+            border-bottom-color: var(--app-accent-color);
+            font-weight: 600;
+        }
+        .tab-button:not(.active):hover {
+            color: var(--app-text-color);
+        }
+
+        .tab-content {
+            display: none;
+            flex-grow: 1;
+            overflow-y: auto;
+            background-color: var(--app-bg-color);
+            padding: 20px;
+        }
+        .tab-content::-webkit-scrollbar { width: 6px; }
+        .tab-content::-webkit-scrollbar-thumb { background-color: var(--app-border-color); border-radius: 3px; }
+        .tab-content::-webkit-scrollbar-track { background-color: transparent; }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tab-content h2 {
+            font-size: 1.4em;
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: var(--app-text-color);
+            flex-shrink: 0;
+        }
+
+        .financial-summary {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-shrink: 0;
+        }
+
+        .summary-card {
+            background-color: var(--app-bg-secondary-color);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .summary-card h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1em;
+            color: var(--app-text-secondary-color);
+            font-weight: 500;
+        }
+        .summary-card p {
+            margin: 4px 0 8px 0;
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--app-text-color);
+        }
+        .summary-card .change { font-size: 0.9em; font-weight: 500; }
+        .change.positive { color: var(--success-color); }
+        .change.negative { color: var(--error-color); }
+        .change.neutral { color: var(--neutral-color); }
+
+        .actions button {
+            display: block;
+            width: 100%;
+            background-color: var(--app-accent-color);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 12px;
+            transition: background-color 0.2s;
+        }
+        .actions button:hover { background-color: var(--app-accent-color-darker); }
+        .actions button:disabled {
+            background-color: var(--app-bg-secondary-color);
+            color: var(--app-text-secondary-color);
+            cursor: not-allowed;
+        }
+
+        .output-area {
+            margin-top: 10px;
+            margin-bottom: 15px;
+            background-color: var(--app-bg-secondary-color);
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 40px;
+            font-size: 0.9em;
+            color: var(--app-text-color);
+            line-height: 1.5;
+        }
+        .output-area h4 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--app-accent-color);
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        .insight-item, .advice-item {
+            background-color: var(--app-bg-color);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--app-accent-color);
+        }
+        .insight-item:last-child, .advice-item:last-child { margin-bottom: 0; }
+        .insight-item p, .advice-item p { margin: 0; white-space: pre-wrap; }
+        
+        #graphsOutputContainer {
+            padding: 15px;
+            background-color: var(--app-bg-secondary-color);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        #graphCanvas {
+            background-color: var(--app-bg-color);
+            border-radius: 6px;
+        }
+
+        #chat { /* tab-content for chat */ }
+        .chat-messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px 5px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-thumb { background-color: var(--app-border-color); border-radius: 3px; }
+
+        .message {
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+            line-height: 1.5;
+            font-size: 0.95em;
+            color: var(--app-text-color);
+        }
+        .message.user {
+            background-color: var(--app-user-message-bg);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+        .message.ai {
+            background-color: var(--app-bg-secondary-color);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+        }
+        .message.ai strong { color: var(--app-accent-color); }
+        .message.ai ul { padding-left: 20px; margin-top: 5px; margin-bottom: 5px; }
+        .message.ai li { margin-bottom: 3px; }
+        .message.error {
+            background-color: var(--error-color);
+            color: white;
+            text-align: center;
+            align-self: center;
+            max-width: 90%;
+        }
+
+        .chat-input-container {
+            display: flex;
+            padding: 15px 10px 10px 10px;
+            border-top: 1px solid var(--app-border-color);
+            background-color: var(--app-bg-color);
+            flex-shrink: 0;
+        }
+        .chat-input-container input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1em;
+            outline: none;
+            background-color: var(--app-bg-secondary-color);
+            color: var(--app-text-color);
+            margin-right: 10px;
+        }
+        .chat-input-container input::placeholder { color: var(--app-text-secondary-color); }
+        .chat-input-container button {
+            padding: 10px 15px;
+            background-color: var(--app-accent-color);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            min-width: 70px;
+        }
+        .chat-input-container button:hover { background-color: var(--app-accent-color-darker); }
+        .chat-input-container button:disabled {
+            background-color: var(--app-bg-secondary-color);
+            color: var(--app-text-secondary-color);
+            cursor: not-allowed;
+        }
+
+        .loading-indicator {
+            text-align: center;
+            padding: 10px;
+            font-style: italic;
+            color: var(--app-text-secondary-color);
+            font-size: 0.9em;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="config-panel">
+            <h2>Configuration</h2>
+            <label for="apiKeyInput">Gemini API Key:</label>
+            <input type="password" id="apiKeyInput" placeholder="Enter your Gemini API Key">
+
+            <label for="modelNameInput">Gemini Model:</label>
+            <input type="text" id="modelNameInput" placeholder="default: gemini-1.5-flash-latest">
+            
+            <button id="saveApiSettingsButton">Save API Settings</button>
+            <p id="configStatus"></p>
+
+            <h2 style="margin-top: 25px;">Load Data</h2>
+            <label for="csvFileInput">Upload Transactions CSV:</label>
+            <input type="file" id="csvFileInput" accept=".csv">
+            <button id="loadCsvDataButton">Load CSV Data</button>
+            <p id="dataStatus">App ready. Upload CSV or load from cache.</p>
+        </div>
+
+        <div class="app-container">
+            <header class="app-header">Personal Finance AI</header>
+
+            <div class="tabs">
+                <button class="tab-button active" data-tab="home">Home</button>
+                <button class="tab-button" data-tab="chat">AI Chat</button>
+            </div>
+
+            <div id="home" class="tab-content active">
+                <h2>Overview</h2>
+                <div class="financial-summary">
+                    <div class="summary-card">
+                        <h3>Assets</h3>
+                        <p id="currentAssets">$0.00</p>
+                        <span id="assetsChange" class="change neutral">+$0.00</span>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Debt</h3>
+                        <p id="currentDebt">$0.00</p>
+                        <span id="debtChange" class="change neutral">+$0.00</span>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button id="generateInsightsBtn" disabled>Generate Insights</button>
+                    <div id="insightsOutputContainer" class="output-area" style="display:none;"><h4>Insights:</h4><div id="insightsOutputContent"></div></div>
+
+                    <button id="generateAdviceBtn" disabled>Generate Advice</button>
+                    <div id="adviceOutputContainer" class="output-area" style="display:none;"><h4>Advice:</h4><div id="adviceOutputContent"></div></div>
+
+                    <button id="generateGraphsBtn" disabled>Generate Graph</button>
+                    <div id="graphsOutputContainer" class="output-area" style="display:none;"><h4>Chart Suggestion:</h4><canvas id="graphCanvas"></canvas></div>
+                </div>
+            </div>
+
+            <div id="chat" class="tab-content">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message ai">Hello! I'm your Personal Finance AI. How can I help you today?</div>
+                </div>
+                <div id="chatLoading" class="loading-indicator" style="display: none;">AI is thinking...</div>
+                <div class="chat-input-container">
+                    <input type="text" id="chatInput" placeholder="Ask about your finances..." disabled>
+                    <button id="sendChatBtn" disabled>Send</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GEMINI_API_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/models/";
+        let userApiKey = localStorage.getItem('geminiApiKeyPFAI_v4') || ""; // Incremented version for storage
+        let geminiModelName = localStorage.getItem('geminiModelPFAI_v4') || "gemini-1.5-flash-latest";
+        let currentChartInstance = null;
+
+        let appData = {
+            accounts: [], // Start with empty accounts
+            transactions: [] // Start with empty transactions
+        };
+        
+        let financialSummary = { 
+            totalAssets: 0, assetsChange: 0, 
+            totalDebts: 0, debtChange: 0, 
+            categorizedSpending: {} 
+        };
+
+
+        // DOM Elements (IDs are the same)
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const modelNameInput = document.getElementById('modelNameInput');
+        const saveApiSettingsButton = document.getElementById('saveApiSettingsButton');
+        const configStatusEl = document.getElementById('configStatus');
+        
+        const csvFileInput = document.getElementById('csvFileInput');
+        const loadCsvDataButton = document.getElementById('loadCsvDataButton');
+        const dataStatusEl = document.getElementById('dataStatus');
+
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        const currentAssetsEl = document.getElementById('currentAssets');
+        const assetsChangeEl = document.getElementById('assetsChange');
+        const currentDebtEl = document.getElementById('currentDebt');
+        const debtChangeEl = document.getElementById('debtChange');
+
+        const homeActionButtons = {
+            insights: document.getElementById('generateInsightsBtn'),
+            advice: document.getElementById('generateAdviceBtn'),
+            graphs: document.getElementById('generateGraphsBtn')
+        };
+        const insightsOutputContainer = document.getElementById('insightsOutputContainer');
+        const insightsOutputContentEl = document.getElementById('insightsOutputContent');
+        const adviceOutputContainer = document.getElementById('adviceOutputContainer');
+        const adviceOutputContentEl = document.getElementById('adviceOutputContent');
+        const graphsOutputContainer = document.getElementById('graphsOutputContainer');
+        const graphCanvasEl = document.getElementById('graphCanvas');
+
+        const chatMessagesEl = document.getElementById('chatMessages');
+        const chatInputEl = document.getElementById('chatInput');
+        const sendChatBtn = document.getElementById('sendChatBtn');
+        const chatLoadingEl = document.getElementById('chatLoading');
+        
+
+        function init() {
+            apiKeyInput.value = userApiKey;
+            modelNameInput.value = geminiModelName === "gemini-1.5-flash-latest" ? "" : geminiModelName;
+            updateConfigStatusAndFeatures();
+            
+            // Try to load data from localStorage, if not, UI remains at $0
+            loadDataFromLocalStorage(); 
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => switchTab(button.dataset.tab));
+            });
+
+            saveApiSettingsButton.addEventListener('click', saveApiSettings);
+            loadCsvDataButton.addEventListener('click', handleCsvUpload);
+            
+            homeActionButtons.insights.addEventListener('click', () => fetchAndDisplayAIResponse('insights', insightsOutputContentEl, insightsOutputContainer));
+            homeActionButtons.advice.addEventListener('click', () => fetchAndDisplayAIResponse('advice', adviceOutputContentEl, adviceOutputContainer));
+            homeActionButtons.graphs.addEventListener('click', () => fetchAndDisplayAIResponse('graphs', graphCanvasEl, graphsOutputContainer));
+
+            sendChatBtn.addEventListener('click', sendChatMessage);
+            chatInputEl.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !sendChatBtn.disabled) sendChatMessage();
+            });
+            
+            switchTab('home'); // Ensure correct tab is active
+            // Initial render of financial summary (will be $0 if no data loaded)
+            calculateAndRenderFinancialSummary();
+        }
+        
+        function loadDataFromLocalStorage() {
+            const storedTransactions = localStorage.getItem('pfaiUserTransactions_v4');
+            const storedAccounts = localStorage.getItem('pfaiUserAccounts_v4');
+            if (storedTransactions && storedAccounts) {
+                try {
+                    appData.transactions = JSON.parse(storedTransactions);
+                    appData.accounts = JSON.parse(storedAccounts);
+                    dataStatusEl.textContent = `Loaded ${appData.transactions.length} transactions from previous session.`;
+                    dataStatusEl.style.color = 'var(--success-color)';
+                    calculateAndRenderFinancialSummary(); // Update UI with loaded data
+                } catch (e) {
+                    console.error("Error parsing stored data:", e);
+                    localStorage.removeItem('pfaiUserTransactions_v4');
+                    localStorage.removeItem('pfaiUserAccounts_v4');
+                    appData.transactions = []; // Reset to empty
+                    appData.accounts = [];   // Reset to empty
+                    dataStatusEl.textContent = "Error loading previous data. Upload CSV.";
+                    dataStatusEl.style.color = 'var(--error-color)';
+                    calculateAndRenderFinancialSummary(); // Render $0 state
+                }
+            } else {
+                dataStatusEl.textContent = "No data loaded. Upload CSV to begin.";
+                dataStatusEl.style.color = 'var(--neutral-color)';
+                // calculateAndRenderFinancialSummary(); // Already called in init, ensures $0 state
+            }
+        }
+
+        function saveApiSettings() {
+            userApiKey = apiKeyInput.value.trim();
+            const modelInputVal = modelNameInput.value.trim();
+            geminiModelName = modelInputVal ? modelInputVal : "gemini-1.5-flash-latest";
+
+            if (userApiKey) {
+                localStorage.setItem('geminiApiKeyPFAI_v4', userApiKey);
+                localStorage.setItem('geminiModelPFAI_v4', geminiModelName);
+            } else {
+                localStorage.removeItem('geminiApiKeyPFAI_v4');
+            }
+            updateConfigStatusAndFeatures();
+        }
+        
+        function updateConfigStatusAndFeatures() {
+            const featuresEnabled = !!userApiKey;
+            if (featuresEnabled) {
+                configStatusEl.textContent = `API Key loaded. Model: ${geminiModelName}. AI features enabled.`;
+                configStatusEl.style.color = "var(--success-color)";
+            } else {
+                configStatusEl.textContent = "API Key not set. AI features are disabled.";
+                configStatusEl.style.color = "var(--error-color)";
+            }
+
+            Object.values(homeActionButtons).forEach(btn => btn.disabled = !featuresEnabled);
+            chatInputEl.disabled = !featuresEnabled;
+            sendChatBtn.disabled = !featuresEnabled;
+        }
+
+        function switchTab(tabId) {
+            tabContents.forEach(content => content.classList.remove('active'));
+            tabButtons.forEach(button => button.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+        }
+
+        function handleCsvUpload() {
+            const file = csvFileInput.files[0];
+            if (!file) {
+                dataStatusEl.textContent = "No file selected.";
+                dataStatusEl.style.color = 'var(--error-color)';
+                return;
+            }
+            dataStatusEl.textContent = "Loading CSV...";
+            dataStatusEl.style.color = 'var(--neutral-color)';
+
+            Papa.parse(file, {
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    if (results.errors.length > 0) {
+                        console.error("CSV Parsing errors:", results.errors);
+                        dataStatusEl.textContent = "Error parsing CSV. Check console.";
+                        dataStatusEl.style.color = 'var(--error-color)';
+                        return;
+                    }
+                    processCsvData(results.data);
+                },
+                error: function(error) {
+                    console.error("PapaParse Error:", error);
+                    dataStatusEl.textContent = "Failed to load CSV.";
+                    dataStatusEl.style.color = 'var(--error-color)';
+                }
+            });
+        }
+
+        function processCsvData(csvData) {
+            const newTransactions = [];
+            const accountMap = new Map(); 
+
+            csvData.forEach((row, index) => {
+                const amount = parseFloat(row.amount);
+                const excluded = row.excluded?.toLowerCase() === 'true';
+                const csvType = row.type?.toLowerCase();
+                let transactionType;
+                let finalAmount = amount;
+
+                if (csvType === 'income') { // Explicit income
+                    transactionType = 'income';
+                    finalAmount = Math.abs(amount); // Ensure positive
+                     // If amount was positive for income in CSV, it's already fine. If negative, make it positive.
+                    if (amount < 0) finalAmount = -amount; else finalAmount = amount;
+
+                } else if (amount < 0 && (csvType === 'regular' || csvType === '' || !csvType )) { // Negative amount usually implies income if not an expense type
+                    // Heuristic: If it's not explicitly an expense and amount is negative, treat as income.
+                    // This part is tricky with your CSV structure as negative can be income OR credit card payment.
+                    // For simplicity, we'll trust the 'type' column if available.
+                    // If 'type' is blank but 'category' is 'Income', treat as income.
+                    if (row.category === 'Income' || row.name?.toLowerCase().includes('payroll') || row.name?.toLowerCase().includes('interest earned')) {
+                        transactionType = 'income';
+                        finalAmount = Math.abs(amount);
+                    } else { // Otherwise, if negative and not explicitly income, assume it's a payment/credit, thus an 'expense' for cash flow summary
+                        transactionType = 'expense';
+                        finalAmount = -Math.abs(amount); // Keep as negative to reduce assets or increase debt conceptually
+                    }
+                }
+                else { // Positive amounts in CSV are expenses, or other types
+                    transactionType = 'expense';
+                    finalAmount = -Math.abs(amount); // App expects expenses as negative
+                }
+
+
+                // Skip excluded transactions that are not clear income
+                if (excluded && transactionType !== 'income') return;
+                // Skip internal transfers that aren't clearly income
+                if (csvType === 'internal transfer' && transactionType !== 'income') return;
+
+                let category = row.category ? row.category.trim() : "Uncategorized";
+                if (category === "Material Necessities") category = "Essentials Shopping";
+                if (category === "Material Desires") category = "Discretionary Shopping";
+                if (category === "") category = "Uncategorized";
+
+
+                const transaction = {
+                    id: `csv-${index}-${Date.now()}`,
+                    date: row.date,
+                    description: row.name,
+                    amount: finalAmount,
+                    type: transactionType,
+                    accountId: row.account ? `${row.account}_${row['account mask'] || 'xxxx'}` : 'unknown_account',
+                    category: category,
+                    parentCategory: row['parent category'] || null,
+                };
+                newTransactions.push(transaction);
+
+                if (transaction.accountId !== 'unknown_account' && !accountMap.has(transaction.accountId)) {
+                    let accType = 'checking'; 
+                    const accNameLower = row.account.toLowerCase();
+                    if (accNameLower.includes('card') || accNameLower.includes('visa') || accNameLower.includes('mastercard') || accNameLower.includes('amex')) {
+                        accType = 'credit_card';
+                    } else if (accNameLower.includes('savings')) {
+                        accType = 'savings';
+                    } else if (accNameLower.includes('loan')) {
+                        accType = 'loan';
+                    } else if (accNameLower.includes('investment') || accNameLower.includes('cash account') || accNameLower.includes('robinhood') || accNameLower.includes('individual')) {
+                        accType = 'investment';
+                    }
+                    
+                    let balance = (Math.random() * 8000) + 2000; // Range $2k-$10k for assets
+                    if (accType === 'credit_card') { // Credit cards are debt
+                        balance = -((Math.random() * 2000) + 100); // Range -$100 to -$2100
+                    } else if (accType === 'loan') { // Loans are debt
+                        balance = -((Math.random() * 15000) + 5000); // Range -$5k to -$20k
+                    }
+
+
+                    accountMap.set(transaction.accountId, {
+                        id: transaction.accountId,
+                        name: row.account,
+                        type: accType,
+                        balance: parseFloat(balance.toFixed(2)),
+                        previousBalance: parseFloat((balance * (0.9 + Math.random() * 0.2)).toFixed(2))
+                    });
+                }
+            });
+
+            appData.transactions = newTransactions;
+            appData.accounts = Array.from(accountMap.values());
+            
+            localStorage.setItem('pfaiUserTransactions_v4', JSON.stringify(appData.transactions));
+            localStorage.setItem('pfaiUserAccounts_v4', JSON.stringify(appData.accounts));
+
+            dataStatusEl.textContent = `Loaded ${appData.transactions.length} transactions from CSV.`;
+            dataStatusEl.style.color = 'var(--success-color)';
+            
+            calculateAndRenderFinancialSummary(); // This will update the UI
+        }
+        
+        function calculateAndRenderFinancialSummary() {
+            let totalAssets = 0, prevAssets = 0, totalDebts = 0, prevDebts = 0;
+            
+            if (appData.accounts && appData.accounts.length > 0) {
+                appData.accounts.forEach(acc => {
+                    if (['checking', 'savings', 'investment'].includes(acc.type)) {
+                        totalAssets += acc.balance;
+                        prevAssets += acc.previousBalance;
+                    } else if (['credit_card', 'loan'].includes(acc.type)) {
+                        totalDebts += Math.abs(acc.balance);
+                        prevDebts += Math.abs(acc.previousBalance);
+                    }
+                });
+            }
+
+            financialSummary.totalAssets = totalAssets;
+            financialSummary.assetsChange = totalAssets - prevAssets;
+            financialSummary.totalDebts = totalDebts;
+            financialSummary.debtChange = totalDebts - prevDebts;
+
+            currentAssetsEl.textContent = formatCurrency(totalAssets);
+            assetsChangeEl.textContent = `${financialSummary.assetsChange >= 0 ? '+' : ''}${formatCurrency(financialSummary.assetsChange)}`;
+            assetsChangeEl.className = `change ${financialSummary.assetsChange > 0 ? 'positive' : financialSummary.assetsChange < 0 ? 'negative' : 'neutral'}`;
+            
+            currentDebtEl.textContent = formatCurrency(totalDebts);
+            debtChangeEl.textContent = `${financialSummary.debtChange >= 0 ? '+' : ''}${formatCurrency(financialSummary.debtChange)}`;
+            debtChangeEl.className = `change ${financialSummary.debtChange > 0 ? 'negative' : financialSummary.debtChange < 0 ? 'positive' : 'neutral'}`;
+
+            financialSummary.categorizedSpending = {};
+            if (appData.transactions && appData.transactions.length > 0) {
+                appData.transactions
+                    .filter(t => t.type === 'expense' && t.category && t.category !== "Uncategorized" && t.category !== "Internal Transfer")
+                    .forEach(t => {
+                        const category = t.category.split('/')[0].trim();
+                        financialSummary.categorizedSpending[category] = (financialSummary.categorizedSpending[category] || 0) + Math.abs(t.amount);
+                    });
+            }
+        }
+
+
+        function formatCurrency(amount) {
+            return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+        }
+
+        async function callGeminiAPI(promptText) { /* ... same as before ... */
+             if (!userApiKey) return "Error: API Key not provided.";
+            
+            const fullApiUrl = `${GEMINI_API_BASE_URL}${geminiModelName}:generateContent?key=${userApiKey}`;
+            
+            try {
+                const response = await fetch(fullApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: promptText }] }],
+                        generationConfig: { temperature: 0.3 } 
+                    }),
+                });
+                const responseBody = await response.json();
+                if (!response.ok) {
+                    console.error("Gemini API Error:", responseBody);
+                    return `Error: ${responseBody.error?.message || response.statusText || "Unknown API error"}`;
+                }
+                if (responseBody.candidates && responseBody.candidates[0]?.content?.parts?.[0]?.text) {
+                    return responseBody.candidates[0].content.parts[0].text;
+                } else if (responseBody.promptFeedback?.blockReason) {
+                     return `Blocked: ${responseBody.promptFeedback.blockReason}`;
+                }
+                return "Error: No valid response from AI.";
+            } catch (error) {
+                console.error("Error calling Gemini API:", error);
+                return `Error: Could not connect. ${error.message}`;
+            }
+        }
+        
+        function getFinancialContextForPrompt() {
+            let spendingSummary = "Key Spending Areas (Top 5): ";
+            const topCategories = Object.entries(financialSummary.categorizedSpending)
+                .sort(([,a],[,b]) => b-a)
+                .slice(0, 5)
+                .map(([cat, amt]) => `${cat}: ${formatCurrency(Math.abs(amt))}`)
+                .join(', ');
+            spendingSummary += topCategories || "No categorized spending data available.";
+
+            // Use appData.transactions here
+            const recentTransactions = appData.transactions && appData.transactions.length > 0 ? appData.transactions
+                .filter(t => t.type === 'expense')
+                .slice(-5) 
+                .map(t => `- ${t.date.substring(5)}: ${t.description}, ${formatCurrency(t.amount)} (${t.category || 'N/A'})`)
+                .join('\n') : "No recent expense transactions.";
+
+            return `
+User's Financial Overview:
+Total Assets: ${formatCurrency(financialSummary.totalAssets)} (Change: ${formatCurrency(financialSummary.assetsChange)})
+Total Debt: ${formatCurrency(financialSummary.totalDebts)} (Change: ${formatCurrency(financialSummary.debtChange)})
+${spendingSummary}
+
+Recent Expenses (last 5):
+${recentTransactions}
+            `;
+        }
+        
+        async function fetchAndDisplayAIResponse(type, outputElement, outputContainer) { /* ... same as before (graph part unchanged)... */
+            if (!userApiKey) return;
+
+            outputContainer.style.display = 'block';
+            if (type === 'insights' || type === 'advice') {
+                outputElement.innerHTML = '<p class="loading-indicator">Generating...</p>';
+            } else if (type === 'graphs') {
+                if (currentChartInstance) currentChartInstance.destroy();
+                const ctx = outputElement.getContext('2d');
+                ctx.clearRect(0, 0, outputElement.width, outputElement.height);
+                ctx.font = "16px var(--font-family)";
+                ctx.fillStyle = "var(--app-text-secondary-color)";
+                ctx.textAlign = "center";
+                ctx.fillText("Generating chart data...", outputElement.width / 2, outputElement.height / 2);
+            }
+            
+            let prompt = "";
+            const context = getFinancialContextForPrompt();
+
+            if (type === 'insights') {
+                prompt = `You are Personal Finance AI. Analyze the user's financial data. Provide 2-3 concise, actionable insights.
+                Format each insight on a new line, starting with "INSIGHT: ".
+                ${context}`;
+            } else if (type === 'advice') {
+                prompt = `You are Personal Finance AI. Based on the user's financial data, provide 2 brief, actionable pieces of advice.
+                Format each piece of advice on a new line, starting with "ADVICE: ".
+                ${context}`;
+            } else if (type === 'graphs') {
+                const topCategoriesData = Object.entries(financialSummary.categorizedSpending)
+                    .sort(([,a],[,b]) => b-a)
+                    .slice(0, 7) 
+                    .reduce((obj, [key, value]) => {
+                        obj[key] = Math.abs(value); 
+                        return obj;
+                    }, {});
+                
+                prompt = `You are a data visualization expert. Based on the user's spending data, generate the necessary components for a JavaScript Chart.js bar chart.
+The chart should display the top 5 spending categories and their amounts.
+Respond ONLY in a valid JSON format like this example:
+{
+  "type": "bar",
+  "title": "Top 5 Spending Categories",
+  "labels": ["Category1", "Category2", "Category3", "Category4", "Category5"],
+  "data": [Amount1, Amount2, Amount3, Amount4, Amount5]
+}
+Use the following spending data: ${JSON.stringify(topCategoriesData)}. Ensure amounts are positive numbers.
+If there are fewer than 5 categories, list all available. If no data, provide an empty chart structure with an appropriate title like "No Spending Data to Display".`;
+            }
+
+            const response = await callGeminiAPI(prompt);
+            
+            if (type === 'insights' || type === 'advice') {
+                outputElement.innerHTML = ''; // Clear "Generating..."
+                if (response.toLowerCase().startsWith("error:") || response.toLowerCase().startsWith("blocked:")) {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add(type === 'insights' ? 'insight-item' : 'advice-item');
+                    itemDiv.innerHTML = `<p style="color: var(--error-color);">${response}</p>`;
+                    outputElement.appendChild(itemDiv);
+                } else {
+                    const items = response.split('\n').filter(line => line.trim().startsWith(type === 'insights' ? "INSIGHT: " : "ADVICE: "));
+                    if (items.length > 0) {
+                        items.forEach(itemText => {
+                            const itemDiv = document.createElement('div');
+                            itemDiv.classList.add(type === 'insights' ? 'insight-item' : 'advice-item');
+                            itemDiv.innerHTML = `<p>${itemText.substring((type === 'insights' ? "INSIGHT: " : "ADVICE: ").length)}</p>`;
+                            outputElement.appendChild(itemDiv);
+                        });
+                    } else {
+                         outputElement.innerHTML = `<p>No specific ${type} generated. AI response: ${response}</p>`;
+                    }
+                }
+            } else if (type === 'graphs') {
+                renderGraphFromAI(response, outputElement);
+            }
+        }
+        
+        function renderGraphFromAI(jsonString, canvasElement) { /* ... same as before ... */
+            if (currentChartInstance) {
+                currentChartInstance.destroy();
+            }
+            const ctx = canvasElement.getContext('2d');
+            ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+
+            try {
+                const match = jsonString.match(/```json\s*([\s\S]*?)\s*```/);
+                let parsableJson = jsonString;
+                if (match && match[1]) {
+                    parsableJson = match[1];
+                }
+                const chartData = JSON.parse(parsableJson);
+                
+                if (!chartData.labels || !chartData.data || chartData.labels.length === 0) {
+                    ctx.font = "16px var(--font-family)";
+                    ctx.fillStyle = "var(--app-text-secondary-color)";
+                    ctx.textAlign = "center";
+                    ctx.fillText(chartData.title || "No data to display", canvasElement.width / 2, canvasElement.height / 2);
+                    return;
+                }
+
+                currentChartInstance = new Chart(ctx, {
+                    type: chartData.type || 'bar',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: chartData.title || 'Spending',
+                            data: chartData.data,
+                            backgroundColor: [ 
+                                'rgba(80, 200, 120, 0.7)', 
+                                'rgba(54, 162, 235, 0.7)', 
+                                'rgba(255, 206, 86, 0.7)', 
+                                'rgba(75, 192, 192, 0.7)', 
+                                'rgba(153, 102, 255, 0.7)', 
+                                'rgba(255, 159, 64, 0.7)'  
+                            ],
+                            borderColor: [
+                                'rgba(80, 200, 120, 1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            title: { display: true, text: chartData.title, color: 'var(--app-text-color)', font: { size: 16 } },
+                            legend: { labels: { color: 'var(--app-text-secondary-color)' } }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, ticks: { color: 'var(--app-text-secondary-color)' }, grid: { color: 'var(--app-border-color)' } },
+                            x: { ticks: { color: 'var(--app-text-secondary-color)' }, grid: { color: 'var(--app-border-color)' } }
+                        }
+                    }
+                });
+
+            } catch (e) {
+                console.error("Error parsing chart JSON or rendering chart:", e, "AI Response:", jsonString);
+                ctx.font = "14px var(--font-family)";
+                ctx.fillStyle = "var(--error-color)";
+                ctx.textAlign = "center";
+                ctx.fillText("Error displaying chart. Check console.", canvasElement.width / 2, canvasElement.height / 2);
+            }
+        }
+
+        function addChatMessage(sender, messageText) { /* ... same as before ... */
+             const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            
+            if (sender === 'ai') {
+                let html = messageText
+                    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') 
+                    .replace(/\*(.*?)\*/g, '<em>$1</em>')    
+                    .replace(/```([\s\S]*?)```/g, '<pre style="background-color: var(--app-bg-color); padding: 5px; border-radius: 4px; overflow-x:auto;"><code>$1</code></pre>')
+                    .replace(/`([^`]+)`/g, '<code style="background-color: var(--app-bg-color); padding: 2px 4px; border-radius: 3px;">$1</code>')
+                    .replace(/^-\s+(.*$)/gm, '<li>$1</li>')      
+                    .replace(/^\*\s+(.*$)/gm, '<li>$1</li>')    
+                    .replace(/^\d+\.\s+(.*$)/gm, '<li>$1</li>');  
+                
+                if (html.includes('<li>')) {
+                    html = html.replace(/((?:<li>.*?<\/li>\s*)+)/g, '<ul>$1</ul>');
+                }
+                messageDiv.innerHTML = html;
+            } else {
+                messageDiv.textContent = messageText;
+            }
+
+            chatMessagesEl.appendChild(messageDiv);
+            chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+        }
+
+        async function sendChatMessage() { /* ... same as before ... */
+            const userMessage = chatInputEl.value.trim();
+            if (!userMessage || !userApiKey) return;
+
+            addChatMessage('user', userMessage);
+            chatInputEl.value = '';
+            chatLoadingEl.style.display = 'block';
+            sendChatBtn.disabled = true;
+
+            let chatHistory = "";
+            const messages = chatMessagesEl.querySelectorAll('.message');
+            const lastMessages = Array.from(messages).slice(-6); 
+            lastMessages.forEach(msg => {
+                chatHistory += `${msg.classList.contains('user') ? 'User' : 'AI'}: ${msg.textContent.substring(0, 200)}\n`;
+            });
+
+            const context = getFinancialContextForPrompt();
+            const prompt = `You are "Personal Finance AI", a friendly, concise, and helpful assistant.
+User's current financial context:
+${context}
+
+Chat history (User/AI):
+${chatHistory}
+User's latest message: "${userMessage}"
+
+Answer the user's question. If the question is unrelated to personal finance, gently guide them back. Format key points or lists clearly using Markdown (bold, bullets).`;
+
+            const aiResponse = await callGeminiAPI(prompt);
+            chatLoadingEl.style.display = 'none';
+            addChatMessage('ai', aiResponse);
+            if (userApiKey) sendChatBtn.disabled = false;
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
