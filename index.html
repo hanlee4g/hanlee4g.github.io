@@ -1,149 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>labs.google/hanjune</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
-    <link rel="manifest" href="images/site.webmanifest">
-</head>
-<body>
-    <header>
-        <div class="logo">
-            <a href="#">@hanjune</a>
-        </div>
-        <div class="header-links">
-            <a href="mailto:hanjune@google.com" class="icon-link">
-                <i class="fas fa-envelope"></i>
-            </a>
-            <a href="https://linkedin.com/in/hanjunelee" target="_blank" class="icon-link">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <a class="profile-photo" href="https://moma.corp.google.com/person/hanjune" target="_blank" class="icon-link">
-                <img src="images/profile.jpg" alt="Profile Photo">
-            </a>
-        </div>
-    </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Your Name — Homepage</title>
+    <meta name="description" content="Han Lee" />
+    <style>
+      :root { color-scheme: light dark; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+        line-height: 1.6;
+        color: #222;
+        background: #fff;
+      }
+      @media (prefers-color-scheme: dark) {
+        body { color: #eaeaea; background: #111; }
+        a { color: #9ecbff; }
+        a:visited { color: #c8b6ff; }
+        .muted { color: #aaa; }
+      }
+      .container {
+        max-width: none;
+        margin: 0;
+        padding: 2rem 1rem 4rem 0.75rem;
+      }
+      header { text-align: left; margin-bottom: 2rem; }
+      h1 { font-size: 2rem; margin: 0 0 0.5rem 0; }
+      .muted { color: #666; font-size: 0.95rem; }
+      .small { font-size: 0.85rem; }
+      img.profile {
+        display: block;
+        width: 160px;
+        height: 160px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin: 1rem 0;
+      }
+      main section { margin: 2rem 0; }
+      h2 { font-size: 1.25rem; margin: 0 0 0.75rem 0; }
+      ul { margin: 0.25rem 0 0 1.25rem; padding: 0; }
+      li { margin: 0.4rem 0; }
+      a { color: #0645ad; text-decoration: underline; }
+      a:visited { color: #0b0080; }
+      footer { margin-top: 3rem; font-size: 0.9rem; text-align: left; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <p id="last-updated" class="muted small">Last updated: </p>
+        <h1>Hanjune Lee</h1>
+        <p>
+            I'm currently a product manager on the Generative Media team in Google Labs. Working on building Google's first consumer 
+            AI music product. Living in NYC.
+          </p>
+      </header>
 
-    <main>
-        <div class="hero-section">
-            <h1>Hire me as an APM2 to help Google</h1>
-            <h2>Chase the <span class="italic">Future.</span></h2>
-        </div>
+      <main>
+        
+        <section aria-labelledby="projects-heading">
+          <h2 id="projects-heading">Projects</h2>
+          <ul>
+            <li>
+              <a href="https://hanlee4g.github.io/" target="_blank" rel="noopener noreferrer">In Progress</a>
+              — trying to build side projects on the weekends.
+            </li>
+          </ul>
+        </section>
 
-        <div class="tiles-container">
-            <div class="tiles-wrapper">
-                <!-- Whisk Tile -->
-                <div class="tile" style="background-color: #f4ce1b;">
-                    <div class="whisk-shape">
-                        <div class="whisk-curve"></div>
-                        <div class="whisk-bolt"></div>
-                        <div class="whisk-dot"></div>
-                    </div>
-                    <div class="tile-content">
-                        <h3 class="whisk-text">Google</h3>
-                        <p class="whisk-text">Experience in P&D, GCP, Core</p>
-                        <button class="launch-button whisk-button">LEARN MORE →</button>
-                    </div>
-                </div>
-
-                <!-- VideoFX Tile -->
-                <div class="tile" style="background-color: #5c88a1;">
-                    <div class="videofx-shape">
-                        <div class="arrow-group"></div>
-                    </div>
-                    <div class="tile-content">
-                        <h3 class="videofx-text">APM Program</h3>
-                        <p class="videofx-text">Startup Circle, Alumni Database, Trip Planning</p>
-                        <button class="launch-button videofx-button">LEARN MORE →</button>
-                    </div>
-                </div>
-
-                <!-- ImageFX Tile -->
-                <div class="tile" style="background-color: #5f6fc9;">
-                    <div class="imagefx-shape">
-                        <div class="square-group"></div>
-                    </div>
-                    <div class="tile-content">
-                        <h3 class="imagefx-text">Northwestern</h3>
-                        <p class="imagefx-text">BA in Computer Science & Legal Studies</p>
-                        <button class="launch-button imagefx-button">GO CATS →</button>
-                    </div>
-                </div>
-
-                <!-- MusicFX Tile -->
-                <div class="tile" style="background-color: #f4a9d8;">
-                    <div class="musicfx-shape">
-                        <div class="wave-group"></div>
-                    </div>
-                    <div class="tile-content">
-                        <h3 class="musicfx-text">Current Projects</h3>
-                        <p class="musicfx-text">Essay Grading, Contituent Engagement, Customer Support Agent</p>
-                        <button class="launch-button musicfx-button">LEARN MORE →</button>
-                    </div>
-                </div>
-
-                <!-- Additional Tiles (Maintaining the same styling for extras) -->
-                <div class="tile" style="background-color: #A8714C;">
-                    <div class="extra-shape-2"></div>
-                    <div class="tile-content">
-                        <h3 class="extra2-text">Inbound</h3>
-                        <p class="extra2-text">Founded an HR Software Startup</p>
-                        <button class="launch-button extra2-button">LEARN MORE →</button>
-                    </div>
-                </div>
-
-                <div class="tile" style="background-color: #506B57;">
-                    <div class="extra-shape-1"></div>
-                    <div class="tile-content">
-                        <h3 class="extra1-text">Startup Internships</h3>
-                        <p class="extra1-text">Soundskrit, Onaroll, Techstars, Bessemer</p>
-                        <button class="launch-button extra1-button">LEARN MORE →</button>
-                    </div>
-                </div>
-                
-                <div class="tile" style="background-color: #6A7645;">
-                    <div class="extra-shape-3"></div>
-                    <div class="tile-content">
-                        <h3 class="extra3-text">Hobbies</h3>
-                        <p class="extra3-text">Volleyball, Fitness, Travel, Meditation</p>
-                        <button class="launch-button extra3-button">LEARN MORE →</button>
-                    </div>
-                </div>
-                
-                <div class="tile" style="background-color: #654C5D;">
-                    <div class="extra-shape-4"></div>
-                    <div class="tile-content">
-                        <h3 class="extra4-text">Books</h3>
-                        <p class="extra4-text">What I read this year</p>
-                        <button class="launch-button extra4-button">LEARN MORE →</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer>
-        <div class="logo">Google</div>
-        <div class="footer-links">
-            <a>Created with Cursor, Google AI Studio, Gemini 2.5 Pro Preview, Claude 3.7 Sonnet Thinking</a>
-        </div>
-    </footer>
-
-    <!-- Modal/Popup for experiences -->
-    <div class="modal" id="experienceModal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <div class="modal-body">
-                <!-- Content will be dynamically inserted here -->
-            </div>
-        </div>
+        <section aria-labelledby="links-heading">
+          <h2 id="links-heading">Links</h2>
+          <ul>
+            <li><a href="https://www.linkedin.com/in/hanjunelee/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            <li><a href="https://x.com/hanlee4g" target="_blank" rel="noopener noreferrer">Twitter</a></li>
+            <li><a href="https://github.com/hanlee4g" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            <li><a href="mailto:hanjune@google.com">hanjune@google.com</a></li>
+            <li><a href="mailto:hanlee4g@gmail.com">hanlee4g@gmail.com</a></li>
+          </ul>
+        </section>
+      </main>
     </div>
 
-    <script src="script.js"></script>
-</body>
-</html> 
+    <script>
+      // Set current year and last updated timestamp
+      (function () {
+        var yearEl = document.getElementById('year');
+        if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+
+        var lastUpdatedEl = document.getElementById('last-updated');
+        if (lastUpdatedEl) {
+          try {
+            var modified = new Date(document.lastModified);
+            if (!isNaN(modified.getTime())) {
+              lastUpdatedEl.textContent = 'Last updated: ' + modified.toLocaleString();
+            }
+          } catch (e) {}
+        }
+      })();
+    </script>
+  </body>
+  </html>
+
+
